@@ -182,7 +182,7 @@ class Quadrilateral(ABC):
         # Check if any edge of one figure intersects with any edge of the other figure
         for i in range(len(self.vertices)):
             for j in range(len(other_figure.vertices)):
-                if self.segments_intersect(self.vertices[i], self.vertices[(i + 1) % len(self.vertices)],
+                if segments_intersect(self.vertices[i], self.vertices[(i + 1) % len(self.vertices)],
                                            other_figure.vertices[j],
                                            other_figure.vertices[(j + 1) % len(other_figure.vertices)]):
                     return True
