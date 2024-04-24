@@ -67,7 +67,7 @@ def test(quadrilateral):
 
 
 if __name__ == '__main__':
-    #Тести, щоб перевірити коректність програми
+    #Тести, щоб перевірити коректність програми(юніт тести)
     parallelogram_points = generate_parallelogram_points(5, 3)
     print("Parallelogram points:")
     print_array(parallelogram_points)
@@ -111,6 +111,7 @@ if __name__ == '__main__':
     rectangle_points2 = [Vertice(-5, -5), Vertice(-3, -5), Vertice(-3, -3), Vertice(-5, -3)]
     rectangle2 = Rectangle(rectangle_points2)
     print(rectangle2.check_main_properties())
+
     print(f"Check if intersects: {rectangle.check_intersection(trapezoid)}")
     print(f"Check if intersects: {parallelogram.check_intersection(diamond)}")
     print(f"Check if intersects: {parallelogram.check_intersection(rectangle2)}")
