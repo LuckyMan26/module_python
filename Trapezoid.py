@@ -1,16 +1,15 @@
-import math
 from math import sqrt
 
 from FigureType import FigureType
-from Vertice import get_distance, angle_between_points
-from quadrilateral import Quadrilateral
+import quadrilateral
 
 
-class Trapezoid(Quadrilateral):
+class Trapezoid(quadrilateral.Quadrilateral):
     def __init__(self, vertices):
         super().__init__(vertices)
         self.shape_type = FigureType.Trapezoid
-        atitude = sqrt(self.length[0] ** 2 - ((self.length[3] - self.length[1]) / 2) ** 2)
+        print(self.length)
+        atitude = sqrt(self.length[3] ** 2 - (((self.length[0]-self.length[2]) ** 2 + self.length[3]**2-self.length[1]**2)/(2*(self.length[0]-self.length[2])))**2)
         self.area = atitude * (self.length[0] + self.length[2]) / 2
 
     def get_area(self):

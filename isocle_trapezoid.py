@@ -41,6 +41,6 @@ class IsoclesTrapezoids(Trapezoid):
         eps = 0.00001
         if not super().check_main_properties():
             return False
-        if abs(self.length[0] - self.length[2])<eps:
+        if abs(self.length[1] - self.length[3])<eps:
             return True
         return False

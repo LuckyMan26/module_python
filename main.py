@@ -1,15 +1,9 @@
 # This is a sample Python script.
+import unittest
 from FigureType import FigureType
-from Square import Square
-from Trapezoid import Trapezoid
 from Vertice import Vertice
-from diamond import Diamond
-from parallelogram import Parallelogram
 from quadrilateral import print_array
-from rectangle import Rectangle
-from isocle_trapezoid import IsoclesTrapezoids
-from rect_trapezoid import RectTrapezoid
-
+import matplotlib.pyplot as plt
 
 def generate_parallelogram_points(width, height):
     return [Vertice(0, 0), Vertice(width, 0), Vertice(width + height, height), Vertice(height, height)]
@@ -27,8 +21,13 @@ def generate_trapezoid_points(base1, base2, height):
     return [Vertice(0, 0), Vertice(base1, 0), Vertice(base2 + height, height), Vertice(height, height)]
 
 
-def generate_isosceles_trapezoid_points(base, height, leg):
-    return [Vertice(0, 0), Vertice(base, 0), Vertice(base + (leg / 2), height), Vertice((leg / 2), height)]
+def generate_isosceles_trapezoid_points(base_width, top_width, height):
+    half_base = base_width / 2.0
+    half_top = top_width / 2.0
+
+    # Define the vertices of the trapezoid
+    vertices = [Vertice(-half_base,0), Vertice(half_base,0), Vertice(half_top,height), Vertice(-half_top,height)]
+    return vertices
 
 
 def generate_rectangular_trapezoid_points(base1, base2, height):
@@ -39,6 +38,91 @@ def generate_diamond_points(diagonal1, diagonal2):
     return [Vertice(0, diagonal1 / 2), Vertice(diagonal2 / 2, 0), Vertice(0, -diagonal1 / 2),
             Vertice(-diagonal2 / 2, 0)]
 
+import unittest
+import diamond
+import Square
+import isocle_trapezoid
+import Trapezoid
+import parallelogram
+import rectangle
+import rect_trapezoid
+
+
+class TestQuadrilateral(unittest.TestCase):
+    def test_parallelogram(self):
+        points = generate_parallelogram_points(5, 3)
+
+        quadrilateral = parallelogram.Parallelogram(points)
+        self.assertEqual(quadrilateral.get_perimeter(), 18.485281374238568)
+        self.assertEqual(quadrilateral.get_area(), 14.999999999999998)
+        self.assertTrue(quadrilateral.is_shape_type(FigureType.Parallelogram))
+        self.assertTrue(quadrilateral.check_main_properties())
+
+    def test_rectangle(self):
+        points = generate_rectangle_points(5, 3)
+        quadrilateral = rectangle.Rectangle(points)
+        self.assertEqual(quadrilateral.get_perimeter(), 16)
+        self.assertEqual(quadrilateral.get_area(), 15)
+        self.assertTrue(quadrilateral.is_shape_type(FigureType.Rectangle))
+        self.assertTrue(quadrilateral.check_main_properties())
+
+
+    def test_square(self):
+        points = generate_square_points(3)
+        quadrilateral = Square.Square(points)
+        self.assertEqual(quadrilateral.get_perimeter(), 12)
+        self.assertEqual(quadrilateral.get_area(), 9)
+        self.assertTrue(quadrilateral.is_shape_type(FigureType.Square))
+        self.assertTrue(quadrilateral.check_main_properties())
+
+    def test_trapezoid(self):
+        points = generate_trapezoid_points(6,3,4)
+        quadrilateral = Trapezoid.Trapezoid(points)
+        self.assertEqual(quadrilateral.get_perimeter(), 18.77995987511004)
+        self.assertEqual(quadrilateral.get_area(), 18.0)
+        self.assertTrue(quadrilateral.is_shape_type(FigureType.Trapezoid))
+        self.assertTrue(quadrilateral.check_main_properties())
+
+    def test_isocles_trapezoid(self):
+        points = generate_isosceles_trapezoid_points(6, 3, 2)
+        quadrilateral = isocle_trapezoid.IsoclesTrapezoids(points)
+        self.assertEqual(quadrilateral.get_perimeter(), 14.0)
+        self.assertEqual(quadrilateral.get_area(), 9)
+        self.assertTrue(quadrilateral.is_shape_type(FigureType.IsocleTrapezoid))
+        self.assertTrue(quadrilateral.check_main_properties())
+    def test_rect_trapezoid(self):
+        points = generate_rectangular_trapezoid_points(6, 3, 4)
+        quadrilateral = rect_trapezoid.RectTrapezoid(points)
+        self.assertEqual(quadrilateral.get_perimeter(), 18)
+        self.assertEqual(quadrilateral.get_area(),18.0)
+        self.assertTrue(quadrilateral.is_shape_type(FigureType.RectTrapezoid))
+        self.assertTrue(quadrilateral.check_main_properties())
+
+    def test_diamond(self):
+        points = generate_diamond_points(5,6)
+        quadrilateral = diamond.Diamond(points)
+
+        self.assertEqual(quadrilateral.get_perimeter(), 15.620499351813308)
+        self.assertEqual(quadrilateral.get_area(), 14.999999999999998)
+        self.assertTrue(quadrilateral.is_shape_type(FigureType.Diamond))
+        self.assertTrue(quadrilateral.check_main_properties())
+    def test_intersection(self):
+        trapezoid_points = generate_trapezoid_points(6, 3, 4)
+
+        trapezoid = Trapezoid.Trapezoid(trapezoid_points)
+        rectangle_points2 = [Vertice(-5, -5), Vertice(-3, -5), Vertice(-3, -3), Vertice(-5, -3)]
+        rectangle2 = rectangle.Rectangle(rectangle_points2)
+        print(rectangle2.check_main_properties())
+        diamond_points = generate_diamond_points(5, 6)
+        d = diamond.Diamond(diamond_points)
+        parallelogram_points = generate_parallelogram_points(5, 3)
+        rectangle_points = generate_rectangle_points(5, 3)
+
+        rect = rectangle.Rectangle(rectangle_points)
+        p = parallelogram.Parallelogram(parallelogram_points)
+        self.assertTrue(rect.check_intersection(trapezoid))
+        self.assertTrue(p.check_intersection(d))
+        self.assertFalse(p.check_intersection(rectangle2))
 
 # Used for test
 def test(quadrilateral):
@@ -67,51 +151,4 @@ def test(quadrilateral):
 
 
 if __name__ == '__main__':
-    #Тести, щоб перевірити коректність програми(юніт тести)
-    parallelogram_points = generate_parallelogram_points(5, 3)
-    print("Parallelogram points:")
-    print_array(parallelogram_points)
-    parallelogram = Parallelogram(parallelogram_points)
-    test(parallelogram)
-    rectangle_points = generate_rectangle_points(5, 3)
-    print("\nRectangle points:")
-    print_array(rectangle_points)
-    rectangle = Rectangle(rectangle_points)
-    test(rectangle)
-
-    square_points = generate_square_points(4)
-    print("\nSquare points:")
-    print_array(square_points)
-    square = Square(square_points)
-    test(square)
-
-    trapezoid_points = generate_trapezoid_points(6, 3, 4)
-    print("\nTrapezoid points:")
-    print_array(trapezoid_points)
-    trapezoid = Trapezoid(trapezoid_points)
-    test(trapezoid)
-
-    isosceles_trapezoid_points = generate_isosceles_trapezoid_points(6, 4, 2)
-    print("\nIsosceles Trapezoid points:")
-    print_array(isosceles_trapezoid_points)
-    isosceles_trapezoid = IsoclesTrapezoids(isosceles_trapezoid_points)
-    test(isosceles_trapezoid)
-
-    rectangular_trapezoid_points = generate_rectangular_trapezoid_points(6, 3, 4)
-    print("\nRectangular Trapezoid points:")
-    print_array(rectangular_trapezoid_points)
-    rect_trapezoid = RectTrapezoid(rectangular_trapezoid_points)
-    test(rect_trapezoid)
-
-    diamond_points = generate_diamond_points(5, 6)
-    print("\nDiamond points:")
-    print_array(diamond_points)
-    diamond = Diamond(diamond_points)
-    test(diamond)
-    rectangle_points2 = [Vertice(-5, -5), Vertice(-3, -5), Vertice(-3, -3), Vertice(-5, -3)]
-    rectangle2 = Rectangle(rectangle_points2)
-    print(rectangle2.check_main_properties())
-
-    print(f"Check if intersects: {rectangle.check_intersection(trapezoid)}")
-    print(f"Check if intersects: {parallelogram.check_intersection(diamond)}")
-    print(f"Check if intersects: {parallelogram.check_intersection(rectangle2)}")
+    unittest.main()
